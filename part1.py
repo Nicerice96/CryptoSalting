@@ -1,38 +1,39 @@
 import hashlib
+import string
+import itertools
 
 student_number = "101224172"
 last_two_digits = student_number[-2:]
 target = f"c0ffee{last_two_digits}"
-def open_file():
-    file = open("10-million-password-list-top-1000000.txt", "r")
-    
-    return file.readlines()
-    
-    
 
-def generate_hash(password_list):
+def password_generator():
+    constraints = string.ascii_lowercase + string.digits
+    length = 5
     
-    salt = "101224172"
-    
-    for password in password_list:
-        password = password.strip()
-        hashed_password = hashlib.sha256(password.encode() + salt.encode()).hexdigest
+    while True:
         
-        if "target" in str(hashed_password):
-            return True
+        for password_tuple in itertools.product(constraints, repeat=length):
+            password = ''.join(password_tuple)
+            hashed_password = generate_hash(password=password)
+            
+            if str(hashed_password).startswith(target):
+                return password, hashed_password
         
-    return False
+        
+        length += 1
+        
+        if length > 16:
+            print("Max length reached! ; resetting...")
+            length = 5
 
+def generate_hash(password):
+    salt = student_number
+    return hashlib.sha256((password + salt).encode()).hexdigest()
 
-    
-    
-    
 if __name__ == "__main__":
-    
-    password_list = open_file()
-    
-    print(generate_hash(password_list=password_list))
-    
-    
-
-    
+    password, hashed_password = password_generator()
+    if password:
+        print(f"Password found: {password}")
+        print(f"Hashed Password : {hashed_password}")
+    else:
+        print("No password found within the constraints.")
