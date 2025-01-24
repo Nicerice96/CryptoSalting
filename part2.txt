@@ -1,0 +1,6 @@
+Salt found: ijfsihtd
+
+
+(venv) (base) zarifkhan@Mac CryptoSalting % python part2.py                    
+Salt found: ijfsihtd
+(venv) (base) zarifkhan@Mac CryptoSalting % 
